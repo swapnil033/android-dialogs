@@ -1,6 +1,8 @@
 package com.example.myselectablelistdialog.util.searchableDialog
 
 import android.app.Activity
+import android.widget.Filter
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import com.example.myselectablelistdialog.R
@@ -24,15 +26,11 @@ class SelectionDialog<T>(
     var listener : SelectionDialogListener<T>? = null
     var adapterListener : SelectionDialogAdapterListener<T>? = null
 
-    val dialogUtil = DialogUtil<DialogSearchableListBinding>(activity, R.layout.dialog_searchable_list).apply {
-        height = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
+    private val dialogUtil = DialogUtil<DialogSearchableListBinding>(activity, R.layout.dialog_searchable_list).apply {
+        height = (activity.resources.displayMetrics.heightPixels * 0.70).toInt()
         cancelable = true
     }
-
-    fun initRvList(){
-        rvlistTemp.clear()
-
-    }
+    private lateinit var adapter : RVAdapter<SearchableItem<T>>
 
     private lateinit var binding: DialogSearchableListBinding
 
@@ -49,6 +47,17 @@ class SelectionDialog<T>(
                 dialog.dismiss()
                 listener?.onSubmit(rvlist)
             }
+            binding.searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    adapter.filter.filter(newText)
+                    return false
+                }
+            })
+
             dialog.setOnDismissListener {
                 listener?.onDismiss(rvlistTemp)
             }
@@ -59,7 +68,7 @@ class SelectionDialog<T>(
 
     private fun initRv(binding: DialogSearchableListBinding) {
 
-        val adapter = RVAdapter<SearchableItem<T>>(layoutId).apply {
+        adapter = RVAdapter<SearchableItem<T>>(layoutId).apply {
             itemClickListener = object : RVAdapter.RecyclerViewOnItemClickListener{
                 override fun onItemClick(id: Int, position: Int) {
                     adapterListener?.onItemClick(id, position, rvlist, this@apply)
@@ -68,11 +77,53 @@ class SelectionDialog<T>(
                     }
                 }
             }
+            itemFilter = object : RVAdapter.RecyclerViewFilterListener{
+                override fun getFilter(): Filter = setFilter(this@apply, rvlist)
+            }
+        }
+        binding.rvList.adapter = adapter
+        adapter.replaceItems(rvlist)
+    }
+
+    private fun setFilter(
+        lisAdapter: RVAdapter<SearchableItem<T>>,
+        searchableItems: ArrayList<SearchableItem<T>>
+    ): Filter {
+
+        val allItems: MutableList<SearchableItem<T>> = searchableItems
+        var selectedItems1: MutableList<SearchableItem<T>>
+
+        return object : Filter(){
+            override fun performFiltering(charSequence: CharSequence?): FilterResults {
+                val charString = charSequence.toString()
+                if (charString.isEmpty()) {
+                    selectedItems1 = allItems
+                }else{
+                    val tempList = java.util.ArrayList<SearchableItem<T>>()
+                    for (row in allItems) {
+                        if (row.text.toLowerCase(Locale.getDefault())
+                                .contains(charString.toLowerCase(Locale.getDefault()))
+                        ) {
+                            tempList.add(row)
+                        }
+                    }
+                    selectedItems1 = tempList
+                }
+                val filterResults = FilterResults()
+                filterResults.values = selectedItems1
+                return filterResults
+            }
+
+            override fun publishResults(
+                charSequence: CharSequence,
+                filterResults: FilterResults) {
+
+                selectedItems1 = filterResults.values as ArrayList<SearchableItem<T>>
+                lisAdapter.replaceItems(selectedItems1)
+            }
+
         }
 
-        binding.rvList.adapter = adapter
-
-        adapter.replaceItems(rvlist)
     }
 
 }
