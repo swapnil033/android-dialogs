@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.example.myselectablelistdialog.model.NameData"/>
+
+        <variable
+            name="viewModel"
+            type="com.example.myselectablelistdialog.model.SearchableItem&lt;NameData&gt;" />
+
+        <variable
+            name="clickHandler"
+            type="com.example.myselectablelistdialog.util.rvAdapter.RVAdapter.RecyclerViewOnItemClickListener" />
+
+        <variable
+            name="adapterPosition"
+            type="Integer" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="title"
+            android:onClick="@{(v) -> clickHandler.onItemClick(v.id, adapterPosition)}"
+            android:checked="@={viewModel.selected}"
+            android:text="@={viewModel.modelClass.name}"
+            android:paddingHorizontal="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/edName"
+            android:layout_width="0dp"
+            android:text="@={viewModel.modelClass.name}"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/checkbox"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

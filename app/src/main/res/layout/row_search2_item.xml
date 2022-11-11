@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.example.myselectablelistdialog.model.NameData"/>
+
+        <variable
+            name="viewModel"
+            type="com.example.myselectablelistdialog.model.SearchableItem&lt;NameData&gt;" />
+
+        <variable
+            name="clickHandler"
+            type="com.example.myselectablelistdialog.util.rvAdapter.RVAdapter.RecyclerViewOnItemClickListener" />
+
+        <variable
+            name="adapterPosition"
+            type="Integer" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{(v) -> clickHandler.onItemClick(v.id, adapterPosition)}"
+        android:background="@{viewModel.selected ? @color/purple_700 : @color/white}"
+        tools:background="@color/purple_700">
+
+        <TextView
+            android:id="@+id/checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@{viewModel.modelClass.name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@{viewModel.selected ? @color/white : @color/purple_700}"
+            tools:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
