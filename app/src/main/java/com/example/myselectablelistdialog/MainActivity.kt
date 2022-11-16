@@ -25,6 +25,16 @@ class MainActivity : AppCompatActivity() {
         SearchableItem(text = "Amit2", modelClass = NameData(name = "Amit2")),
         SearchableItem(text = "Amit3", modelClass = NameData(name = "Amit3")),
         SearchableItem(text = "Amit4", modelClass = NameData(name = "Amit4")),
+        SearchableItem(text = "Amit", modelClass = NameData(name = "Amit")),
+        SearchableItem(text = "Amit1", modelClass = NameData(name = "Amit1")),
+        SearchableItem(text = "Amit2", modelClass = NameData(name = "Amit2")),
+        SearchableItem(text = "Amit3", modelClass = NameData(name = "Amit3")),
+        SearchableItem(text = "Amit4", modelClass = NameData(name = "Amit4")),
+        SearchableItem(text = "Amit", modelClass = NameData(name = "Amit")),
+        SearchableItem(text = "Amit1", modelClass = NameData(name = "Amit1")),
+        SearchableItem(text = "Amit2", modelClass = NameData(name = "Amit2")),
+        SearchableItem(text = "Amit3", modelClass = NameData(name = "Amit3")),
+        SearchableItem(text = "Amit4", modelClass = NameData(name = "Amit4")),
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

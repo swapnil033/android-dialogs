@@ -27,7 +27,7 @@ class SelectionDialog<T>(
     var adapterListener : SelectionDialogAdapterListener<T>? = null
 
     private val dialogUtil = DialogUtil<DialogSearchableListBinding>(activity, R.layout.dialog_searchable_list).apply {
-        height = (activity.resources.displayMetrics.heightPixels * 0.70).toInt()
+        //height = (activity.resources.displayMetrics.heightPixels * 0.70).toInt()
         cancelable = true
     }
     private lateinit var adapter : RVAdapter<SearchableItem<T>>
